@@ -1,18 +1,27 @@
-// Require mysql from package;
+const connection = require("./db/db");
 
-const mysql = require("mysql");
+// console.log(connection);
 
-const connection = mysql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: "",
+connection.query(`SELECT * FROM employees WHERE id = ${4}`, (err, rows) => {
+	if (err) throw err;
+
+	console.log(rows.name);
+
+	rows.map(row => {
+		console.log(row.name);
+	});
 });
 
-connection.connect(err => {
-	if (err) {
-		console.log(err.code, "error connecting to db");
-		return;
-	}
+const employees = { name: "Daniel", location: "UK" };
 
-	console.log("connected to mysql db successfully");
+connection.query("INSERT INTO employees SET ?", employees, (err, res) => {
+	if (err) throw err;
+
+	console.log(res.insertId);
+});
+
+connection.query(`DELETE FROM employees WHERE id =${5} `, (err, res) => {
+	if (err) console.log(err);
+
+	console.log(res.insertId, "Id");
 });
